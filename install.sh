@@ -6,5 +6,5 @@ CHECK=$(test -f "$VAL" && echo "true" || echo "false")
 if [[ "$CHECK" == "false" ]]; then
 	echo "starting installations"
 	mkdir $VALPATH
-	echo "$VALPATLH" >pothooks.txt
+	echo "$VALPATH" >pothooks.txt
 fi

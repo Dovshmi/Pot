@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VAL=$HOME/.config/rofi/pot/pothoocks.txt
+VAL=$HOME/.config/rofi/pot/pothooks.txt
 CHECK=$(test -f "$VAL" && echo "true" || echo "false")
 if [[ "$CHECK" == "false" ]]; then
 	dunstify "Cannot find pothooks.txt needs install.sh " -i danger -t 6000
