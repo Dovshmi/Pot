@@ -13,26 +13,52 @@ fi
 HOOKSSORTED=$(sort "$HOOKS" | uniq)
 echo "$HOOKSSORTED" | tr ' ' '\n' >"$HOOKS"
 
+delete_mode() {
+	foo=$(cat "$HOOKS" | ${MENU} -mesg "Delete Mode : [ Enter - Delete ] [ESC]" -theme "$THEME")
+	sed -i "\|^${foo}$|d" "$HOOKS"
+}
+
+append_mode() {
+	foo=$(${MENU} -mesg "Append Mode : [ Enter - Append ] [ESC]" -theme "$THEME")
+	if [ -n "$foo" ]; then
+		echo "$foo" >>"$HOOKS"
+	fi
+}
+
 while true; do
 	foo=$(
-		cat "$HOOKS" | ${MENU} -mesg "Normal Mode : [ D/[-] -> Delete ] [ A/[+] -> Append ] [ Enter -> Choose ] [ ? -> Help ]" -theme "$THEME"
+		cat "$HOOKS" | ${MENU} -mesg "Normal Mode : [ D/[-] -> Delete ] [ A/[+] -> Append ] [ Enter -> Choose ] [ ? -> Help ] [ESC]" -theme "$THEME"
 	)
 	case $foo in
 	"d" | "delete" | "Delete" | "D" | "-")
 		dunstify "Delete Mode " -i danger -t 6000
-		foo=$(cat "$HOOKS" | ${MENU} -mesg "Delete Mode : [ Enter - Delete ]" -theme "$THEME")
-		sed -i "\|^${foo}$|d" "$HOOKS"
+		delete_mode
 		;;
 	"a" | "add" | "Add" | "A" | "append" | "Append" | "+")
 		dunstify "Append Mode " -i danger -t 6000
-		foo=$(${MENU} -mesg "Append Mode : [ Enter - Append ]" -theme "$THEME")
-		if [ -n "$foo" ]; then
-			echo "$foo" >>"$HOOKS"
-		fi
+		append_mode
 		;;
 	"?")
-		echo -e "Normal Mode -> Main hooked paths choosing menu\nDelete Mode -> Delete from hooked paths\nAppend Mode -> Append to hooked paths" |
-			${MENU} -mesg "Help Mode : [Enter - Choose]" -e - -theme "$THEME"
+		HELP=$(echo -e "Normal Mode -> Main hooked paths choosing menu\nDelete Mode -> Delete from hooked paths\nAppend Mode -> Append to hooked paths\nExit -> Exit" |
+			${MENU} -mesg "Help Mode : [Enter - Choose] [ESC]" -e - -theme "$THEME")
+		HELP=$(echo $HELP | awk '{print $1}')
+		case "$HELP" in
+		"Delete")
+			dunstify "Delete Mode " -i danger -t 6000
+			delete_mode
+
+			;;
+		"Append")
+			dunstify "Append Mode " -i danger -t 6000
+			append_mode
+			;;
+		"Exit")
+			break
+			;;
+		*)
+			echo default
+			;;
+		esac
 		;;
 	"exit" | "q" | "quit" | ":q" | ":wq" | "")
 		break # Exit the loop
