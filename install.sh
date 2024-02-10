@@ -15,11 +15,11 @@ sleep 1
 
 if [[ "$CHECKDIR" == "false" ]]; then
 	echo "starting installation of dir"
-	mkdir $HOOKSPATH
+	mkdir "$HOOKSPATH"
 	sleep 1
 elif [[ "$CHECK" == "false" ]]; then
 	echo "starting installation of file"
-	echo "pot" >$HOOKS
+	echo "pot" >"$HOOKS"
 	sleep 1
 fi
 
