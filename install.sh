@@ -38,7 +38,7 @@ install_pothooks() {
 create_symlink() {
 	read -p "Do you want to create a symlink for /usr/bin/pot? (yes/no): " choice
 	case "$choice" in
-	yes)
+	yes | y | YES | Y)
 		if [[ -L "$BIN_PATH" ]]; then
 			echo "Removing old version of pot from /usr/bin..."
 			sudo rm "$BIN_PATH" || {
@@ -49,7 +49,6 @@ create_symlink() {
 		DIRNAME="$(realpath "$0")"
 		DIRNAME=$(dirname "$DIRNAME")
 		REALNAME="$DIRNAME/$SCRIPT_NAME"
-		echo "$REALNAME"
 		echo "Creating symlink for pot in /usr/bin..."
 		sudo ln -s "$REALNAME" "$BIN_PATH" || {
 			echo "Failed to create symlink."
@@ -57,7 +56,7 @@ create_symlink() {
 		}
 		echo "Symlink created successfully."
 		;;
-	no)
+	no | n | NO | N)
 		echo "Skipping symlink creation."
 		;;
 	*)
@@ -91,10 +90,10 @@ prompt_install() {
 prompt_dependencies() {
 	read -p "Do you want to check for dependencies? (yes/no): " choice
 	case "$choice" in
-	yes)
+	yes | y | YES | Y)
 		check_dependencies
 		;;
-	no) ;;
+	no | n | NO | N) ;;
 	*)
 		echo "Invalid choice. Please enter 'yes' or 'no'."
 		prompt_dependencies
@@ -116,9 +115,9 @@ check_dependencies() {
 }
 
 # Main script starts here
-echo "Pot installation script"
-echo "Path for Pot Chosen: $HOOKSPATH"
-echo "Path for Saved Data Chosen: $HOOKS"
+echo "Pot installation script" && sleep 1
+echo "Path for Pot Chosen: $HOOKSPATH" && sleep 1
+echo "Path for Saved Data Chosen: $HOOKS" && sleep 1
 
 # Check and install directory
 #install_directory
@@ -132,4 +131,6 @@ prompt_install
 # Prompt user to check for dependencies
 prompt_dependencies
 
-echo "Installation Complete. Check $HOOKSPATH directory for all files."
+echo -e "Installation Complete. Check $HOOKSPATH directory for all files.\n" && sleep 1
+echo -e "PS: you are using $DESKTOP_SESSION as youre Desktop\n" && sleep 1
+echo -e "try lookimg at the README.md at https://github.com/Dovshmi/pot\n" && sleep 1
