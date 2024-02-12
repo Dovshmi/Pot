@@ -1,6 +1,6 @@
 #!/bin/bash
 
-HOOKS="$HOME/.config/rofi/pot/pothooks.txt"
+HOOKS="$HOME/.local/share/pot/pothooks.txt"
 CHECK=$(test -f "$HOOKS" && echo "true" || echo "false")
 
 #TAG if no theme used
