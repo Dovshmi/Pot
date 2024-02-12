@@ -47,7 +47,9 @@ create_symlink() {
 			}
 		fi
 		DIRNAME="$(realpath "$0")"
+		DIRNAME=$(dirname "$DIRNAME")
 		REALNAME="$DIRNAME/$SCRIPT_NAME"
+		echo "$REALNAME"
 		echo "Creating symlink for pot in /usr/bin..."
 		sudo ln -s "$REALNAME" "$BIN_PATH" || {
 			echo "Failed to create symlink."
