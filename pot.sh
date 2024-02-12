@@ -21,6 +21,17 @@ if [[ "$CHECK" == "false" ]]; then
 	exit
 fi
 
+if command -v xclip >/dev/null 2>&1; then
+	clipboard_command="xclip -rmlastnl -selection clipboard"
+# Check if xsel is available
+elif command -v xsel >/dev/null 2>&1; then
+	clipboard_command="xsel -i -b"
+else
+	# Display error notification if neither xclip nor xsel is available
+	notify "Clipboard copy failed: xclip and xsel not found" "warning"
+	exit 1
+fi
+
 HOOKSSORTED=$(sort "$HOOKS" | uniq)
 echo "$HOOKSSORTED" | tr ' ' '\n' >"$HOOKS"
 
@@ -81,7 +92,7 @@ while true; do
 		;;
 	*)
 		if grep --fixed-string -x "$foo" "$HOOKS"; then
-			echo "$foo" | xclip -rmlastnl -selection clipboard || xsel -i -b
+			echo "$foo" | $clipboard_command || notify "Clipboard copy failed" "danger"
 			#dunstify "Clip Loaded" -i notification -t 6000
 			notify "Clipboard Loaded" "notification"
 			break
