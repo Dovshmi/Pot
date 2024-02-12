@@ -81,9 +81,9 @@ while true; do
 		;;
 	*)
 		if grep --fixed-string -x "$foo" "$HOOKS"; then
-			echo "$foo" | xclip -rmlastnl -selection clipboard
+			echo "$foo" | xclip -rmlastnl -selection clipboard || xsel -i -b
 			#dunstify "Clip Loaded" -i notification -t 6000
-			notify "clipboard Loaded" "notification"
+			notify "Clipboard Loaded" "notification"
 			break
 		fi
 		;;
