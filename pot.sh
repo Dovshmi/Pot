@@ -3,8 +3,9 @@
 HOOKS="$HOME/.local/share/pot/pothooks.txt"
 CHECK=$(test -f "$HOOKS" && echo "true" || echo "false")
 
-#TAG if no theme used
-THEME="-theme $HOME/.config/rofi/launchers/type-1/style-8.rasi"
+#TAG if no theme used && Tag if theme exists check line below
+THEME="$HOME/.config/rofi/launchers/type-1/style-8.rasi"
+[[ ! -f "$THEME" ]] && THEME="" || THEME="-theme $THEME"
 
 #Untag if using dmenu and tag rofi
 MENU="rofi -dmenu $THEME -mesg "
@@ -12,11 +13,12 @@ MENU="rofi -dmenu $THEME -mesg "
 
 # Display a message using dunst $1 -> massage for the user $2 -> icon name
 notify() {
+	#Tag dunsity and Untag echo if dunst is not used
 	dunstify "$1" -i "$2" -t 6000
+	#echo "$1"
 }
 
 if [[ "$CHECK" == "false" ]]; then
-	#dunstify "Cannot find pothooks.txt, needs install.sh " -i danger -t 6000
 	notify "Cannot find pothooks.txt, needs install.sh" "danger"
 	exit
 fi
@@ -53,12 +55,10 @@ while true; do
 	)
 	case $foo in
 	":d" | "delete" | "Delete" | ":D" | "-")
-		#dunstify "Delete Mode " -i danger -t 6000
 		notify "Delete Mode" "danger"
 		delete_mode
 		;;
 	":a" | "add" | "Add" | ":A" | "append" | "Append" | "+")
-		#dunstify "Append Mode " -i danger -t 6000
 		notify "Append Mode" "danger"
 		append_mode
 		;;
@@ -68,13 +68,11 @@ while true; do
 		HELP=$(echo $HELP | awk '{print $1}')
 		case "$HELP" in
 		"Delete")
-			#dunstify "Delete Mode " -i danger -t 6000
 			notify "Delete Mode" "danger"
 			delete_mode
 
 			;;
 		"Append")
-			#dunstify "Append Mode " -i danger -t 6000
 			notify "Append Mode" "danger"
 
 			append_mode
@@ -93,7 +91,6 @@ while true; do
 	*)
 		if grep --fixed-string -x "$foo" "$HOOKS"; then
 			echo "$foo" | $clipboard_command || notify "Clipboard copy failed" "danger"
-			#dunstify "Clip Loaded" -i notification -t 6000
 			notify "Clipboard Loaded" "notification"
 			break
 		fi
